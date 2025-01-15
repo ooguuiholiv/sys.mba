@@ -23,6 +23,7 @@ async function getData(): Promise<Payment[]> {
       phone: "(34)99767-4565",
       fullname: "Guilherme Franco Oliveira",
       cpf: "149.352.456-97",
+      team: "Latão",
     },
     // ...
   ];
@@ -48,7 +49,11 @@ export default async function DashboardEmployee() {
               <Label htmlFor="fullname" className="text-right">
                 Nome Completo
               </Label>
-              <Input id="fullname" value="Nome Completo" className="col-span-3" />
+              <Input
+                id="fullname"
+                value="Nome Completo"
+                className="col-span-3"
+              />
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="cpf" className="text-right">
@@ -62,10 +67,21 @@ export default async function DashboardEmployee() {
               </Label>
               <Input id="phone" value="Telefone" className="col-span-3" />
             </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="team" className="text-right">
+                Equipe
+              </Label>
+              <Input id="team" value="Equipe" className="col-span-3" />
+            </div>
           </div>
           <SheetFooter>
             <SheetClose asChild>
-              <Button type="submit">Salvar</Button>
+              <Button
+                className="bg-green-500 text-white font-bold"
+                type="submit"
+              >
+                Salvar
+              </Button>
             </SheetClose>
           </SheetFooter>
         </SheetContent>

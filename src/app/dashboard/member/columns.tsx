@@ -9,6 +9,7 @@ export type Payment = {
   phone: string;
   fullname: string
   cpf: string;
+  team: string;
 };
 
 export const columns: ColumnDef<Payment>[] = [
@@ -23,5 +24,9 @@ export const columns: ColumnDef<Payment>[] = [
   {
     accessorKey: "phone",
     header: "Telefone",
+  },
+  {
+    accessorKey: "team",
+    header: "Equipe",
   },
 ];
