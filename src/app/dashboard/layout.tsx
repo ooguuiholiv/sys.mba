@@ -1,25 +1,25 @@
-"use client"
+"use client";
 import { NavItems } from "@/components/pages/dashboard/nav-items";
 import { ReactNode } from "react";
 import Logo from "@/assets/logo.svg";
 import { UserDropdown } from "@/components/pages/dashboard/user-dropdown";
 import { ModeToggle } from "@/components/shared/theme-toogle";
-import * as React from 'react'
-import { Menu, X } from "lucide-react"; // Para ícones
-
+import * as React from "react";
+import { Menu, X } from "lucide-react";
+import { useSession } from "next-auth/react";
 
 type DashboardLayoutProps = {
   children: ReactNode;
 };
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
+  const { data: session } = useSession();
 
-    const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
 
-    const toggleSidebar = () => {
-      setIsSidebarOpen(!isSidebarOpen);
-    };
-
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
 
   return (
     <div className="w-full h-screen overflow-hidden grid lg:grid-cols-[300px,1fr] grid-cols-1">
@@ -31,11 +31,10 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       >
         <div className="w-full p-6 border-b border-muted flex justify-between items-center">
           <Logo />
-          
         </div>
         <NavItems />
         <div className="w-full mt-auto border-t border-muted px-3 py-4 flex items-center justify-between gap-2">
-          <UserDropdown />
+          <UserDropdown user={session?.user} />
           <ModeToggle />
         </div>
       </aside>

@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Calendar1, Group, SquareUser, User2 } from "lucide-react";
+import { Calendar1, Group, LogIn, SquareUser, User2 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -19,7 +19,8 @@ export const NavItems = () => {
       icon: Group,
       path: "/dashboard/team",
     },
-    { label: "Funcionário", icon: User2, path: "/dashboard/member" },
+   // { label: "Funcionário", icon: User2, path: "/dashboard/member" },
+    { label: "Login", icon: LogIn, path: "/auth/login" },
   ];
   return (
     <nav className="w-full flex flex-col gap-2 px-2 py-4">

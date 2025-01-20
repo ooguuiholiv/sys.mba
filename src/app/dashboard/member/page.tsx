@@ -1,12 +1,18 @@
 import { Button } from "@/components/ui/button";
 import { Payment, columns } from "./columns";
 import { DataTable } from "./data-table";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 import {
   Sheet,
   SheetClose,
   SheetContent,
-  SheetDescription,
   SheetFooter,
   SheetHeader,
   SheetTitle,
@@ -31,6 +37,8 @@ async function getData(): Promise<Payment[]> {
 
 export default async function DashboardEmployee() {
   const data = await getData();
+
+  const teams = ["Latão", "Ferrugem", "Inox", "Alumínio"];
 
   return (
     <div className="container mx-auto py-10">
@@ -71,7 +79,18 @@ export default async function DashboardEmployee() {
               <Label htmlFor="team" className="text-right">
                 Equipe
               </Label>
-              <Input id="team" value="Equipe" className="col-span-3" />
+              <Select>
+                <SelectTrigger id="team" className="col-span-3">
+                  <SelectValue placeholder="Selecione uma equipe" />
+                </SelectTrigger>
+                <SelectContent>
+                  {teams.map((team, index) => (
+                    <SelectItem key={index} value={team}>
+                      {team}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
           </div>
           <SheetFooter>

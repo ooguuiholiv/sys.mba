@@ -1,10 +1,11 @@
+"use client"
+import {useState, useEffect} from "react";
 import { Payment, columns } from "./columns";
 import { DataTable } from "./data-table";
 import {
   Sheet,
   SheetClose,
   SheetContent,
-  SheetDescription,
   SheetFooter,
   SheetHeader,
   SheetTitle,
@@ -13,21 +14,53 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { db } from "@/app/db/drizzle";
+import { teams } from "@/app/db/schema/schema";
 
-async function getData(): Promise<Payment[]> {
-  // Fetch data from your API here.
-  return [
-    {
-      id: "728ed52f",
-      team: "Latão",
-      members: 8,
-    },
-    // ...
-  ];
-}
+export default function DashboardTeam() {
+  const [data, setData] = useState<Payment[]>([]);
+  const [newTeam, setNewTeam] = useState("");
 
-export default async function DashboardTeam() {
-  const data = await getData();
+ const fetchTeamsFromDB = async () => {
+   try {
+     const response = await fetch("/api/teams");
+     const teamsData = await response.json();
+     setData(teamsData);
+   } catch (error) {
+     console.error("Erro ao buscar equipes:", error);
+   }
+ };
+
+  const saveTeamToDB = async (team: string) => {
+    try {
+      const response = await fetch("/api/teams", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ team }),
+      });
+
+      if (response.ok) {
+        fetchTeamsFromDB(); // Atualiza os dados após inserir
+      }
+    } catch (error) {
+      console.error("Erro ao salvar equipe:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchTeamsFromDB();
+  }, []);
+
+  const handleSaveTeam = async () => {
+    if (newTeam.trim() === "") {
+      alert("Por favor, insira o nome da equipe.");
+      return;
+    }
+    await saveTeamToDB(newTeam); // Salva no banco
+    setNewTeam(""); // Limpa o input
+  };
 
   return (
     <div className="container mx-auto py-10">
@@ -46,14 +79,15 @@ export default async function DashboardTeam() {
               <Label htmlFor="team" className="text-right">
                 Lider da Equipe
               </Label>
-              <Input id="team" value="Lider da Equipe" className="col-span-3" />
+              <Input id="team" value={newTeam} onChange={(e) => {setNewTeam(e.target.value)}} className="col-span-3" />
             </div>
           </div>
           <SheetFooter>
             <SheetClose asChild>
               <Button
+                onClick={handleSaveTeam}
                 className="bg-green-500 text-white font-bold"
-                type="submit"
+                type="button"
               >
                 Salvar
               </Button>
