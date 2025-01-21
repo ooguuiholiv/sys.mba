@@ -6,13 +6,13 @@ import {
   mysqlTable,
   primaryKey,
   varchar,
-} from "drizzle-orm/mysql-core"
-import type { AdapterAccountType } from "next-auth/adapters"
- 
+} from "drizzle-orm/mysql-core";
+import type { AdapterAccountType } from "next-auth/adapters";
+import { sql } from "drizzle-orm";
 
- 
+
 //Auth
- 
+
 export const users = mysqlTable("user", {
   id: varchar("id", { length: 255 })
     .primaryKey()
@@ -24,8 +24,11 @@ export const users = mysqlTable("user", {
     fsp: 3,
   }),
   image: varchar("image", { length: 255 }),
-})
- 
+  role: varchar("role", { length: 255 })
+    .notNull()
+    .$defaultFn(() => sql`'guest'`),
+});
+
 export const accounts = mysqlTable(
   "account",
   {
@@ -50,16 +53,16 @@ export const accounts = mysqlTable(
       columns: [account.provider, account.providerAccountId],
     }),
   })
-)
- 
+);
+
 export const sessions = mysqlTable("session", {
   sessionToken: varchar("sessionToken", { length: 255 }).primaryKey(),
   userId: varchar("userId", { length: 255 })
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
   expires: timestamp("expires", { mode: "date" }).notNull(),
-})
- 
+});
+
 export const verificationTokens = mysqlTable(
   "verificationToken",
   {
@@ -72,8 +75,8 @@ export const verificationTokens = mysqlTable(
       columns: [verificationToken.identifier, verificationToken.token],
     }),
   })
-)
- 
+);
+
 export const authenticators = mysqlTable(
   "authenticator",
   {
@@ -97,17 +100,17 @@ export const authenticators = mysqlTable(
       columns: [authenticator.userId, authenticator.credentialID],
     }),
   })
-)
+);
 
 // Platform
 
 export const teamEvents = mysqlTable("team_events", {
-  id: int("id").primaryKey().autoincrement(), 
-  eventDate: date("event_date").notNull(), 
-  description: varchar("description", { length: 1024 }).notNull(), 
+  id: int("id").primaryKey().autoincrement(),
+  eventDate: date("event_date").notNull(),
+  description: varchar("description", { length: 1024 }).notNull(),
 });
 
 export const teams = mysqlTable("teams", {
   id: int("id").primaryKey().autoincrement(), // ID único com autoincremento
-  team: varchar("team", { length: 255 }).notNull(), 
+  team: varchar("team", { length: 255 }).notNull(),
 });

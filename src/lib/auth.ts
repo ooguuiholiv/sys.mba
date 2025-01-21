@@ -8,8 +8,8 @@ import { db } from "@/app/db/drizzle";
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: DrizzleAdapter(db),
   providers: [GitHub, Google],
-  pages:{
-    newUser: '/dashboard/calendar',
-    signIn: '/auth/login'
-  }
+  pages: {
+    newUser: "/dashboard/calendar",
+    signIn: "/auth/login",
+  },
 });
