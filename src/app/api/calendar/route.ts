@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/app/db/drizzle";
 import { teamEvents } from "@/app/db/schema/schema";
 import { sql } from "drizzle-orm";
+import { getUserRoleById } from "@/app/api/user/route";
+import { auth } from "@/lib/auth";
 
 // Obter eventos por data
 export async function GET(req: NextRequest) {
@@ -32,6 +34,19 @@ export async function GET(req: NextRequest) {
 
 // Adicionar evento
 export async function POST(req: NextRequest) {
+
+  const session = await auth();
+  if (!session?.user)
+    return NextResponse.json({ message: "Nenhum usuário autenticado!" });
+  const userId = session?.user?.id;
+  const role = await getUserRoleById(JSON.stringify(userId));
+  if (role !== "admin") {
+    return NextResponse.json(
+      { message: "Usuário não autorizado a executar esta ação" },
+      { status: 401 }
+    );
+  }
+
   const body = await req.json();
   const { eventDate, description } = body;
 
@@ -59,6 +74,19 @@ export async function POST(req: NextRequest) {
 
 // Deletar evento
 export async function DELETE(req: NextRequest) {
+  
+  const session = await auth();
+    if (!session?.user)
+      return NextResponse.json({ message: "Nenhum usuário autenticado!" });
+    const userId = session?.user?.id;
+    const role = await getUserRoleById(JSON.stringify(userId));
+    if (role !== "admin") {
+      return NextResponse.json(
+        { message: "Usuário não autorizado a executar esta ação" },
+        { status: 401 }
+      );
+    }
+
   const body = await req.json();
   const { id } = body;
 
