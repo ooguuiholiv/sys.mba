@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "@/app/db/drizzle";
 import { teams } from "@/app/db/schema/schema";
-import { getUserRoleById } from "@/app/api/user/route";
+import { getUserRoleById } from "@/lib/user/route";
 import { auth } from "@/lib/auth";
 
 // Função que busca os dados do banco

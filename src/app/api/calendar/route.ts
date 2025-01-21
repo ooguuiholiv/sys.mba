@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/app/db/drizzle";
 import { teamEvents } from "@/app/db/schema/schema";
 import { sql } from "drizzle-orm";
-import { getUserRoleById } from "@/app/api/user/route";
+import { getUserRoleById } from "@/lib/user/route";
 import { auth } from "@/lib/auth";
 
 // Obter eventos por data
